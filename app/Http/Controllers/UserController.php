@@ -14,7 +14,12 @@ class UserController extends Controller
     public function index()
     {
         $title = 'Listado de Usuarios';
-        $users = ['Dayan', 'Carlos', 'Zoraida', 'Gonzalo'];
+
+        if(request()->has('empty')) {
+            $users = [];
+        } else {
+            $users = ['Dayan', 'Carlos', 'Zoraida', 'Gonzalo'];
+        }
 
         return view('users', compact('title', 'users'));
     }
@@ -26,7 +31,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return "Crear Nuevo Usuario";
+        $title = "Crear Nuevo Usuario";
+        return view('user_new', compact('title'));
     }
 
     /**
@@ -48,7 +54,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return "Mostrando detalle del usuario: {$id}";
+        $title = 'Detalle de Usuario';
+        return view('user', compact('title', 'id'));
     }
 
     /**
@@ -59,7 +66,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return "Editar Usuario {$id}";
+        $title = 'Editar Usuario';
+        return view('user_edit', compact('title', 'id'));
     }
 
     /**

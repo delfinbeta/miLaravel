@@ -8,12 +8,8 @@
 	<link rel="stylesheet" href="">
 </head>
 <body>
-	<h1><?=e($title)?></h1>
-
-	<ul>
-		<?php foreach($users as $user): ?>
-		<li><?=e($user)?></li>
-		<?php endforeach; ?>
-	</ul>	
+	<h1>{{ $title }}</h1>
+	<hr />
+	<p>Editar Usuario {{ $id }}</p>
 </body>
 </html>

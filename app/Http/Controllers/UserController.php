@@ -21,7 +21,7 @@ class UserController extends Controller
             $users = ['Dayan', 'Carlos', 'Zoraida', 'Gonzalo'];
         }
 
-        return view('users', compact('title', 'users'));
+        return view('users.index', compact('title', 'users'));
     }
 
     /**
@@ -32,7 +32,7 @@ class UserController extends Controller
     public function create()
     {
         $title = "Crear Nuevo Usuario";
-        return view('user_new', compact('title'));
+        return view('users.new', compact('title'));
     }
 
     /**
@@ -55,7 +55,7 @@ class UserController extends Controller
     public function show($id)
     {
         $title = 'Detalle de Usuario';
-        return view('user', compact('title', 'id'));
+        return view('users.show', compact('title', 'id'));
     }
 
     /**
@@ -67,7 +67,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $title = 'Editar Usuario';
-        return view('user_edit', compact('title', 'id'));
+        return view('users.edit', compact('title', 'id'));
     }
 
     /**

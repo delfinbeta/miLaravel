@@ -42,18 +42,27 @@ class UserSeeder extends Seeder
             'is_admin' => true
         ]);
 
-        User::create([
+        // User::create([
+        //     'profession_id' => $professionId,
+        //     'name' => 'Dulayne Rosales',
+        //     'email' => 'dulayney@gmail.com',
+        //     'password' => bcrypt('123456')
+        // ]);
+
+        // User::create([
+        //     'profession_id' => 4,
+        //     'name' => 'Alfredo Cubillos',
+        //     'email' => 'allfredo@gmail.com',
+        //     'password' => bcrypt('123456')
+        // ]);
+
+        factory(User::class)->create([
             'profession_id' => $professionId,
             'name' => 'Dulayne Rosales',
             'email' => 'dulayney@gmail.com',
             'password' => bcrypt('123456')
         ]);
 
-        User::create([
-            'profession_id' => 4,
-            'name' => 'Alfredo Cubillos',
-            'email' => 'allfredo@gmail.com',
-            'password' => bcrypt('123456')
-        ]);
+        factory(User::class, 10)->create();
     }
 }

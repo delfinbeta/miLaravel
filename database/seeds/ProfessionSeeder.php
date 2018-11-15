@@ -36,5 +36,7 @@ class ProfessionSeeder extends Seeder
         ]);
 
         DB::table('professions')->where('id', 1)->delete();
+
+        factory(Profession::class, 6)->create();
     }
 }

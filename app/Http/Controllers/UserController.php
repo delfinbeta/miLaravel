@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -15,11 +17,18 @@ class UserController extends Controller
     {
         $title = 'Listado de Usuarios';
 
-        if(request()->has('empty')) {
-            $users = [];
-        } else {
-            $users = ['Dayan', 'Carlos', 'Zoraida', 'Gonzalo'];
-        }
+        // if(request()->has('empty')) {
+        //     $users = [];
+        // } else {
+        //     $users = ['Dayan', 'Carlos', 'Zoraida', 'Gonzalo'];
+        // }
+
+        // $users = DB::table('users')->get();
+        $users = User::all();
+
+        // return view('users.index')
+        //     ->with('title', $title)
+        //     ->with('users', $users);
 
         return view('users.index', compact('title', 'users'));
     }

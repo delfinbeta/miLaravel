@@ -9,7 +9,7 @@
 	@if(!empty($users))
 	<ul>
 		@foreach($users as $user)
-		<li>{{ $user }}</li>
+		<li>{{ $user->name }}</li>
 		@endforeach
 	</ul>
 	@else

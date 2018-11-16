@@ -6,15 +6,13 @@
 	<h1>{{ $title }}</h1>
 	<hr />
 
-	@if(!empty($users))
 	<ul>
-		@foreach($users as $user)
+		@forelse($users as $user)
 		<li>{{ $user->name }}</li>
-		@endforeach
+		@empty
+		<li>No hay usuarios registrados</li>
+		@endforelse
 	</ul>
-	@else
-	<p>No hay usuarios registrados</p>
-	@endif
 @endsection
 
 @section('sidebar')

@@ -41,11 +41,15 @@ class UsersModuleTest extends TestCase
                  ->assertSee('No hay usuarios registrados');
     }
 
-    public function test_it_loads_users_details()
+    public function test_it_displays_users_details()
     {
-        $this->get('/usuarios/5')
+        $user = factory(User::class)->create([
+            'name' => 'Dayan Betancourt',
+        ]);
+
+        $this->get('/usuarios/'.$user->id)
         		 ->assertStatus(200)
-        		 ->assertSee('Mostrando detalle del usuario: 5');
+        		 ->assertSee('Dayan Betancourt');
     }
 
     public function test_it_loads_new_user()

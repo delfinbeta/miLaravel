@@ -6,13 +6,30 @@
 	<h1>{{ $title }}</h1>
 	<hr />
 
-	<ul>
-		@forelse($users as $user)
-		<li>{{ $user->name }}</li>
-		@empty
-		<li>No hay usuarios registrados</li>
-		@endforelse
-	</ul>
+	<table class="table table-striped table-dark">
+	  <thead>
+	    <tr>
+	      <th scope="col">Nombre</th>
+	      <th scope="col">Email</th>
+	      <th scope="col">Opciones</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	@forelse($users as $user)
+	    <tr>
+	      <td>{{ $user->name }}</td>
+	      <td>{{ $user->email }}</td>
+	      <td>
+	      	<a class="btn btn-outline-info" href="usuarios/{{ $user->id }}" role="button">Ver más +</a>
+	      </td>
+	    </tr>
+	    @empty
+	    <tr>
+	    	<td colspan="3">No hay usuarios registrados</td>
+	    </tr>
+	    @endforelse
+	  </tbody>
+	</table>
 @endsection
 
 @section('sidebar')

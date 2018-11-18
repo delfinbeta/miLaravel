@@ -61,11 +61,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
         $title = 'Detalle de Usuario';
 
-        $user = User::findOrFail($id);
+        // $user = User::findOrFail($id);
 
         // $user = User::find($id);
 

@@ -20,7 +20,7 @@
 	      <td>{{ $user->name }}</td>
 	      <td>{{ $user->email }}</td>
 	      <td>
-	      	<a class="btn btn-outline-info" href="usuarios/{{ $user->id }}" role="button">Ver más +</a>
+	      	<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-outline-info" role="button">Ver más +</a>
 	      </td>
 	    </tr>
 	    @empty

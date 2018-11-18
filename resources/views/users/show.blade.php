@@ -18,5 +18,8 @@
 	    <p class="card-text">Correo electrónico: {{ $user->email }}</p>
 	    <p class="card-text">Creado: {{ $user->created_at }}</p>
 	  </div>
+	  <div class="card-footer">
+	  	<a href="{{ url('/usuarios/') }}" class="btn btn-outline-light"><< Regresar al Listado</a>
+	  </div>
 	</div>
 @endsection

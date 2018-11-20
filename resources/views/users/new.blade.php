@@ -5,6 +5,10 @@
 @section('content')
 	<h1>{{ $title }}</h1>
 	<hr />
+	<form method="POST" action="{{ url('usuarios/nuevo') }}">
+		{{ csrf_field() }}
+		<button type="submit" class="btn btn-info">Crear Usuario</button>
+	</form>
 @endsection
 
 @section('sidebar')

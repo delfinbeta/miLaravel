@@ -59,6 +59,25 @@ class UsersModuleTest extends TestCase
                 ->assertSee('Crear Nuevo Usuario');
     }
 
+    public function test_it_creates_new_user() {
+        $this->post('/usuarios/nuevo', [
+            'name' => 'Dayan Betancourt',
+            'email' => 'dkbetancourt@gmail.com',
+            'password' => 'dayan123'
+        ])->assertRedirect('usuarios');
+
+        // $this->assertDatabaseHas('users', [
+        //     'name' => 'Dayan Betancourt',
+        //     'email' => 'dkbetancourt@gmail.com',
+        // ]);
+
+        $this->assertCredentials([
+            'name' => 'Dayan Betancourt',
+            'email' => 'dkbetancourt@gmail.com',
+            'password' => 'dayan123'
+        ]);
+    }
+
     public function test_it_loads_edit_user()
     {
         $this->get('/usuarios/5/edit')

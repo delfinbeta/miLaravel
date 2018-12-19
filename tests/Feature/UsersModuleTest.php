@@ -89,7 +89,87 @@ class UsersModuleTest extends TestCase
             ])->assertRedirect('/usuarios/nuevo')
                 ->assertSessionHasErrors(['name' => 'El campo nombre es obligatorio']);
 
-        // $this->assertEqual(0, User::count());
+        // $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'dkbetancourt@gmail.com',
+        ]);
+    }
+
+    public function test_email_required() {
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios/nuevo', [
+                'name' => 'Dayan Betancourt',
+                'email' => '',
+                'password' => 'dayan123'
+            ])->assertRedirect('/usuarios/nuevo')
+                ->assertSessionHasErrors(['email' => 'El campo email es obligatorio']);
+
+        // $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'dkbetancourt@gmail.com',
+        ]);
+    }
+
+    public function test_email_invalid() {
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios/nuevo', [
+                'name' => 'Dayan Betancourt',
+                'email' => 'email_no_valido.com',
+                'password' => 'dayan123'
+            ])->assertRedirect('/usuarios/nuevo')
+                ->assertSessionHasErrors(['email' => 'Email inválido']);
+
+        // $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'dkbetancourt@gmail.com',
+        ]);
+    }
+
+    public function test_email_unique() {
+        factory(User::class)->create([
+            'email' => 'dkbetancourt@gmail.com'
+        ]);
+
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios/nuevo', [
+                'name' => 'Dayan Betancourt',
+                'email' => 'dkbetancourt@gmail.com',
+                'password' => 'dayan123'
+            ])->assertRedirect('/usuarios/nuevo')
+                ->assertSessionHasErrors(['email' => 'Email ya registrado']);
+
+        $this->assertEquals(1, User::count());
+    }
+
+    public function test_password_required() {
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios/nuevo', [
+                'name' => 'Dayan Betancourt',
+                'email' => 'dkbetancourt@gmail.com',
+                'password' => ''
+            ])->assertRedirect('/usuarios/nuevo')
+                ->assertSessionHasErrors(['password' => 'El campo contraseña es obligatorio']);
+
+        // $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'dkbetancourt@gmail.com',
+        ]);
+    }
+
+    public function test_password_6caracteres() {
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios/nuevo', [
+                'name' => 'Dayan Betancourt',
+                'email' => 'dkbetancourt@gmail.com',
+                'password' => '123'
+            ])->assertRedirect('/usuarios/nuevo')
+                ->assertSessionHasErrors(['password' => 'La contraseña debe contener mínimo 6 caracteres']);
+
+        // $this->assertEquals(0, User::count());
 
         $this->assertDatabaseMissing('users', [
             'email' => 'dkbetancourt@gmail.com',

@@ -60,6 +60,8 @@ class UsersModuleTest extends TestCase
     }
 
     public function test_it_creates_new_user() {
+        // $this->withoutExceptionHandling();
+
         $this->post('/usuarios/nuevo', [
             'name' => 'Dayan Betancourt',
             'email' => 'dkbetancourt@gmail.com',

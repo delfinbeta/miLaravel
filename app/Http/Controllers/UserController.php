@@ -101,10 +101,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
         $title = 'Editar Usuario';
-        return view('users.edit', compact('title', 'id'));
+        return view('users.edit', compact('title', 'user'));
     }
 
     /**

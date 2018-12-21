@@ -178,9 +178,15 @@ class UsersModuleTest extends TestCase
 
     public function test_it_loads_edit_user()
     {
-        $this->get('/usuarios/5/edit')
+        $user = factory(User::class)->create();
+
+        $this->get("/usuarios/{$user->id}/edit")
                 ->assertStatus(200)
-                ->assertSee('Editar Usuario 5');
+                ->assertViewIs('users.edit')
+                ->assertSee('Editar Usuario')
+                ->assertViewHas('user', function ($viewUser) use ($user) {
+                    return $viewUser->id == $user->id;
+                });
     }
 
     public function test_404_error_user_not_found()

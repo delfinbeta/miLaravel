@@ -28,8 +28,8 @@ Route::get('/usuarios/nuevo', 'UserController@create')
 Route::post('/usuarios/nuevo', 'UserController@store')
 	->name('users.store');
 
-Route::get('/usuarios/{id}/edit', 'UserController@edit')
-	->where(['id' => '[\d]+'])
+Route::get('/usuarios/{user}/edit', 'UserController@edit')
+	->where(['user' => '[\d]+'])
 	->name('users.edit');
 
 Route::get('/saludo/{nombre}', 'WelcomeUserController@index');

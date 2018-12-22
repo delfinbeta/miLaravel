@@ -32,6 +32,8 @@ Route::get('/usuarios/{user}/edit', 'UserController@edit')
 	->where(['user' => '[\d]+'])
 	->name('users.edit');
 
+Route::put('/usuarios/{user}', 'UserController@update');
+
 Route::get('/saludo/{nombre}', 'WelcomeUserController@index');
 
 Route::get('/saludo/{nombre}/{apodo?}', 'WelcomeUserController@index2');

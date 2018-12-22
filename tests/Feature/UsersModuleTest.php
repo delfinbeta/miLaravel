@@ -47,7 +47,7 @@ class UsersModuleTest extends TestCase
             'name' => 'Dayan Betancourt',
         ]);
 
-        $this->get('/usuarios/'.$user->id)
+        $this->get("/usuarios/{$user->id}")
                 ->assertStatus(200)
                 ->assertSee('Dayan Betancourt');
     }
@@ -187,6 +187,22 @@ class UsersModuleTest extends TestCase
                 ->assertViewHas('user', function ($viewUser) use ($user) {
                     return $viewUser->id == $user->id;
                 });
+    }
+
+    public function test_it_update_user() {
+        $user = factory(User::class)->create();
+
+        $this->put("/usuarios/{$user->id}", [
+            'name' => 'Dayan Betancourt',
+            'email' => 'dkbetancourt@gmail.com',
+            'password' => 'dayan123'
+        ])->assertRedirect("/usuarios/{$user->id}");
+
+        $this->assertCredentials([
+            'name' => 'Dayan Betancourt',
+            'email' => 'dkbetancourt@gmail.com',
+            'password' => 'dayan123'
+        ]);
     }
 
     public function test_404_error_user_not_found()

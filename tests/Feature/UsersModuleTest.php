@@ -248,9 +248,30 @@ class UsersModuleTest extends TestCase
     ]);
   }
 
+  public function test_email_same_updating() {
+    $oldEmail = 'dkbetancourt@gmail.com';
+
+    $user = factory(User::class)->create([
+      'email' => $oldEmail
+    ]);
+
+    $this->from("/usuarios/{$user->id}/edit")
+         ->put("/usuarios/{$user->id}", [
+          'name' => 'Dayan Betancourt',
+          'email' => $oldEmail,
+          'password' => ''
+         ])->assertRedirect("/usuarios/{$user->id}");
+
+    $this->assertDatabaseHas('users', [
+      'name' => 'Dayan Betancourt',
+      'email' => $oldEmail
+    ]);
+  }
+
   public function test_email_unique_updating() {
-    self::markTestIncomplete();
-    return;
+    factory(User::class)->create([
+      'email' => 'email-existe@gmail.com'
+    ]);
 
     $user = factory(User::class)->create([
       'email' => 'dkbetancourt@gmail.com'
@@ -259,12 +280,12 @@ class UsersModuleTest extends TestCase
     $this->from("/usuarios/{$user->id}/edit")
          ->put("/usuarios/{$user->id}", [
           'name' => 'Dayan Betancourt',
-          'email' => 'dkbetancourt@gmail.com',
-          'password' => 'dayan123'
+          'email' => 'email-existe@gmail.com',
+          'password' => 'existe123'
          ])->assertRedirect("/usuarios/{$user->id}/edit")
            ->assertSessionHasErrors(['email']);
 
-    $this->assertEquals(1, User::count());
+    // $this->assertEquals(1, User::count());
   }
 
   public function test_password_optional_updating() {

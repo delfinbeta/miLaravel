@@ -11,7 +11,7 @@
 	    <tr>
 	      <th scope="col">Nombre</th>
 	      <th scope="col">Email</th>
-	      <th scope="col">Opciones</th>
+	      <th scope="col" colspan="3">Opciones</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -20,12 +20,22 @@
 	      <td>{{ $user->name }}</td>
 	      <td>{{ $user->email }}</td>
 	      <td>
-	      	<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-outline-info" role="button">Ver más +</a>
+	      	<a href="{{ route('users.show', $user) }}" class="btn btn-outline-info" role="button">Ver más +</a>
+	      </td>
+	      <td>
+	      	<a href="{{ route('users.edit', $user) }}" class="btn btn-outline-warning" role="button">Editar</a>
+	      </td>
+	      <td>
+	      	<form method="POST" action="{{ route('users.delete', $user) }}">
+	      		{{ method_field('DELETE') }}
+	      		{{ csrf_field() }}
+	      		<button type="submit" class="btn btn-outline-danger">Eliminar</button>
+	      	</form>
 	      </td>
 	    </tr>
 	    @empty
 	    <tr>
-	    	<td colspan="3">No hay usuarios registrados</td>
+	    	<td colspan="5">No hay usuarios registrados</td>
 	    </tr>
 	    @endforelse
 	  </tbody>

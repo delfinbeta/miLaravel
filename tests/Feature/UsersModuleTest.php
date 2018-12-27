@@ -309,6 +309,17 @@ class UsersModuleTest extends TestCase
     ]);
   }
 
+  public function test_delete_user() {
+    $user = factory(User::class)->create();
+
+    $this->delete("/usuarios/{$user->id}")
+         ->assertRedirect('usuarios');
+
+    $this->assertDatabaseMissing('users', [
+      'id' => $user->id
+    ]);
+  }
+
   public function test_404_error_user_not_found() {
     $this->get('/usuarios/999')
          ->assertStatus(404)

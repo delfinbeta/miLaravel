@@ -6,6 +6,7 @@
 	<h1>{{ $title }}</h1>
 	<hr />
 
+	@if($users->isNotEmpty())
 	<table class="table table-striped table-dark">
 	  <thead>
 	    <tr>
@@ -15,7 +16,7 @@
 	    </tr>
 	  </thead>
 	  <tbody>
-	  	@forelse($users as $user)
+	  	@foreach($users as $user)
 	    <tr>
 	      <td>{{ $user->name }}</td>
 	      <td>{{ $user->email }}</td>
@@ -33,13 +34,14 @@
 	      	</form>
 	      </td>
 	    </tr>
-	    @empty
-	    <tr>
-	    	<td colspan="5">No hay usuarios registrados</td>
-	    </tr>
-	    @endforelse
+	    @endforeach
 	  </tbody>
 	</table>
+	@else
+	<div class="alert alert-danger">
+		No hay usuarios registrados
+	</div>
+	@endif
 @endsection
 
 @section('sidebar')

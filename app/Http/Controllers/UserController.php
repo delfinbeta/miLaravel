@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\{User, UserProfile};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\CreateUserRequest;
 
 class UserController extends Controller
 {
@@ -51,26 +52,25 @@ class UserController extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function store(Request $request)
+  public function store(CreateUserRequest $request)
   {
-    $data = $request->validate([
-      'name' => 'required',
-      'email' => 'required|email|unique:users,email',
-      'password' => 'required|min:6'
-    ], [
-      'name.required' => 'El campo nombre es obligatorio',
-      'email.required' => 'El campo email es obligatorio',
-      'email.email' => 'Email inválido',
-      'email.unique' => 'Email ya registrado',
-      'password.required' => 'El campo contraseña es obligatorio',
-      'password.min' => 'La contraseña debe contener mínimo 6 caracteres'
-    ]);
+    // $data = $request->validate([
+    //   'name' => 'required',
+    //   'email' => 'required|email|unique:users,email',
+    //   'password' => 'required|min:6',
+    //   'bio' => 'required',
+    //   'twitter' => 'url'
+    // ], [
+    //   'name.required' => 'El campo nombre es obligatorio',
+    //   'email.required' => 'El campo email es obligatorio',
+    //   'email.email' => 'Email inválido',
+    //   'email.unique' => 'Email ya registrado',
+    //   'password.required' => 'El campo contraseña es obligatorio',
+    //   'password.min' => 'La contraseña debe contener mínimo 6 caracteres'
+    // ]);
 
-    User::create([
-      'name' => $data['name'],
-      'email' => $data['email'],
-      'password' => bcrypt($data['password'])
-    ]);
+    // User::createUser($data);
+    $request->createUser();
 
     return redirect()->route('users.list');
   }

@@ -19,31 +19,31 @@
 	<form method="POST" action="{{ url('usuarios/nuevo') }}">
 		{{ csrf_field() }}
 
+		<?php if($errors->has('name')) {
+						$error1 = 'is-invalid';
+						$msj_error1 = $errors->first('name');
+					} else {
+						$error1 = '';
+						$msj_error1 = '';
+					}
+
+					if($errors->has('email')) {
+						$error2 = 'is-invalid';
+						$msj_error2 = $errors->first('email');
+					} else {
+						$error2 = '';
+						$msj_error2 = '';
+					}
+
+					if($errors->has('password')) {
+						$error3 = 'is-invalid';
+						$msj_error3 = $errors->first('password');
+					} else {
+						$error3 = '';
+						$msj_error3 = '';
+					} ?>
+
 		<div class="form-group">
-			<?php if($errors->has('name')) {
-							$error1 = 'is-invalid';
-							$msj_error1 = $errors->first('name');
-						} else {
-							$error1 = '';
-							$msj_error1 = '';
-						}
-
-						if($errors->has('email')) {
-							$error2 = 'is-invalid';
-							$msj_error2 = $errors->first('email');
-						} else {
-							$error2 = '';
-							$msj_error2 = '';
-						}
-
-						if($errors->has('password')) {
-							$error3 = 'is-invalid';
-							$msj_error3 = $errors->first('password');
-						} else {
-							$error3 = '';
-							$msj_error3 = '';
-						} ?>
-
 			<label for="name">Nombre:</label>
 			<input type="text" name="name" id="name" class="form-control {{ $error1 }}" value="{{ old('name') }}" />
 			<div class="invalid-feedback">{{ $msj_error1 }}</div>
@@ -57,6 +57,14 @@
 			<label for="password">Contraseña:</label>
 			<input type="password" name="password" id="password" class="form-control {{ $error3 }}" />
 			<div class="invalid-feedback">{{ $msj_error3 }}</div>
+		</div>
+		<div class="form-group">
+			<label for="bio">Bio:</label>
+			<textarea name="bio" id="bio" class="form-control">{{ old('bio') }}</textarea>
+		</div>
+		<div class="form-group">
+			<label for="twitter">Twitter:</label>
+			<input type="text" name="twitter" id="twitter" class="form-control" placeholder="https://twitter.com/usuario" value="{{ old('twitter') }}" />
 		</div>
 
 		<button type="submit" class="btn btn-info">Crear Usuario</button>

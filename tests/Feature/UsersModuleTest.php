@@ -61,7 +61,9 @@ class UsersModuleTest extends TestCase
     $this->post('/usuarios/nuevo', [
       'name' => 'Dayan Betancourt',
       'email' => 'dkbetancourt@gmail.com',
-      'password' => 'dayan123'
+      'password' => 'dayan123',
+      'bio' => 'Programador de Laravel',
+      'twitter' => 'https://twitter.com/delfinbeta'
     ])->assertRedirect('usuarios');
 
     // $this->assertDatabaseHas('users', [
@@ -73,6 +75,11 @@ class UsersModuleTest extends TestCase
       'name' => 'Dayan Betancourt',
       'email' => 'dkbetancourt@gmail.com',
       'password' => 'dayan123'
+    ]);
+
+    $this->assertDatabaseHas('user_profiles', [
+      'bio' => 'Programador de Laravel',
+      'twitter' => 'https://twitter.com/delfinbeta'
     ]);
   }
 

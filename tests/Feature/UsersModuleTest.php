@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\User;
+use App\Profession;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 class UsersModuleTest extends TestCase
 {
   use RefreshDatabase;
+
+  protected $profession;
 
   /**
    * A basic test example.
@@ -58,13 +61,15 @@ class UsersModuleTest extends TestCase
   public function test_it_creates_new_user() {
     // $this->withoutExceptionHandling();
 
-    $this->post('/usuarios/nuevo', [
-      'name' => 'Dayan Betancourt',
-      'email' => 'dkbetancourt@gmail.com',
-      'password' => 'dayan123',
-      'bio' => 'Programador de Laravel',
-      'twitter' => 'https://twitter.com/delfinbeta'
-    ])->assertRedirect('usuarios');
+    // $this->post('/usuarios/nuevo', [
+    //   'name' => 'Dayan Betancourt',
+    //   'email' => 'dkbetancourt@gmail.com',
+    //   'password' => 'dayan123',
+    //   'bio' => 'Programador de Laravel',
+    //   'twitter' => 'https://twitter.com/delfinbeta'
+    // ])->assertRedirect('usuarios');
+
+    $this->post('/usuarios/nuevo', $this->getValidData())->assertRedirect('usuarios');
 
     // $this->assertDatabaseHas('users', [
     //   'name' => 'Dayan Betancourt',
@@ -74,7 +79,8 @@ class UsersModuleTest extends TestCase
     $this->assertCredentials([
       'name' => 'Dayan Betancourt',
       'email' => 'dkbetancourt@gmail.com',
-      'password' => 'dayan123'
+      'password' => 'dayan123',
+      'profession_id' => $this->profession->id
     ]);
 
     $this->assertDatabaseHas('user_profiles', [
@@ -154,6 +160,50 @@ class UsersModuleTest extends TestCase
           'password' => '123'
          ]))->assertRedirect('/usuarios/nuevo')
            ->assertSessionHasErrors(['password' => 'La contraseña debe contener mínimo 6 caracteres']);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'dkbetancourt@gmail.com',
+    ]);
+  }
+
+  public function test_profession_id_optional() {
+    $this->post('/usuarios/nuevo', $this->getValidData([
+      'profession_id' => null
+    ]))->assertRedirect('usuarios');
+
+    $this->assertCredentials([
+      'name' => 'Dayan Betancourt',
+      'email' => 'dkbetancourt@gmail.com',
+      'password' => 'dayan123',
+      'profession_id' => null,
+    ]);
+
+    $this->assertDatabaseHas('user_profiles', [
+      'bio' => 'Programador de Laravel',
+      'user_id' => User::findByEmail('dkbetancourt@gmail.com')->id
+    ]);
+  }
+
+  public function test_profession_invalid() {
+    $this->post('/usuarios/nuevo', $this->getValidData([
+      'profession_id' => '999'
+    ]))->assertRedirect('usuarios/nuevo')
+       ->assertSessionHasErrors(['profession_id']);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'dkbetancourt@gmail.com',
+    ]);
+  }
+
+  public function test_only_profession_no_deleted() {
+    $deletedProfession = factory(Profession::class)->create([
+      'deleted_at' => now()->format('Y-m-d')
+    ]);
+
+    $this->post('/usuarios/nuevo', $this->getValidData([
+      'profession_id' => $deletedProfession->id
+    ]))->assertRedirect('usuarios/nuevo')
+       ->assertSessionHasErrors(['profession_id']);
 
     $this->assertDatabaseMissing('users', [
       'email' => 'dkbetancourt@gmail.com',
@@ -333,10 +383,13 @@ class UsersModuleTest extends TestCase
   }
 
   protected function getValidData(array $custom = []) {
+    $this->profession = factory(Profession::class)->create();
+
     return array_filter(array_merge([
       'name' => 'Dayan Betancourt',
       'email' => 'dkbetancourt@gmail.com',
       'password' => 'dayan123',
+      'profession_id' => $this->profession->id,
       'bio' => 'Programador de Laravel',
       'twitter' => 'https://twitter.com/delfinbeta'
     ], $custom));

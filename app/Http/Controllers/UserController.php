@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{User, Profession, UserProfile};
+use App\{User, Profession, UserProfile, Skill};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -45,8 +45,9 @@ class UserController extends Controller
     $title = "Crear Nuevo Usuario";
 
     $professions = Profession::orderBy('title', 'ASC')->get();
+    $skills = Skill::orderBy('name', 'ASC')->get();
 
-    return view('users.new', compact('title', 'professions'));
+    return view('users.new', compact('title', 'professions', 'skills'));
   }
 
   /**

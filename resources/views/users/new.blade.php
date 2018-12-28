@@ -75,8 +75,21 @@
 			<label for="twitter">Twitter:</label>
 			<input type="text" name="twitter" id="twitter" class="form-control" placeholder="https://twitter.com/usuario" value="{{ old('twitter') }}" />
 		</div>
-
-		<button type="submit" class="btn btn-info">Crear Usuario</button>
+		<h5>Habilidades</h5>
+		@foreach($skills as $skill)
+		<div class="form-check form-check-inline">
+		  <input class="form-check-input" 
+		  	type="checkbox" 
+		  	name="skills[{{ $skill->id }}]" 
+		  	id="skill_{{ $skill->id }}" 
+		  	value="{{ $skill->id }}" 
+		  	{{ old("skills.{$skill->id}") ? 'checked' : '' }} />
+		  <label class="form-check-label" for="skill_{{ $skill->id }}">{{ $skill->name }}</label>
+		</div>
+		@endforeach
+		<div class="form-group mt-4">
+			<button type="submit" class="btn btn-info">Crear Usuario</button>
+		</div>
 	</form>
 @endsection
 

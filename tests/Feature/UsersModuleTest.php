@@ -81,7 +81,13 @@ class UsersModuleTest extends TestCase
     //   'twitter' => 'https://twitter.com/delfinbeta'
     // ])->assertRedirect('usuarios');
 
-    $this->post('/usuarios/nuevo', $this->getValidData())->assertRedirect('usuarios');
+    $skillA = factory(Skill::class)->create();
+    $skillB = factory(Skill::class)->create();
+    $skillC = factory(Skill::class)->create();
+
+    $this->post('/usuarios/nuevo', $this->getValidData([
+      'skills' => [$skillA->id, $skillB->id]
+    ]))->assertRedirect('usuarios');
 
     // $this->assertDatabaseHas('users', [
     //   'name' => 'Dayan Betancourt',
@@ -94,11 +100,28 @@ class UsersModuleTest extends TestCase
       'password' => 'dayan123'
     ]);
 
+    $user = User::findByEmail('dkbetancourt@gmail.com');
+
     $this->assertDatabaseHas('user_profiles', [
       'bio' => 'Programador de Laravel',
       'twitter' => 'https://twitter.com/delfinbeta',
       'profession_id' => $this->profession->id,
-      'user_id' => User::findByEmail('dkbetancourt@gmail.com')->id
+      'user_id' => $user->id
+    ]);
+
+    $this->assertDatabaseHas('user_skill', [
+      'user_id' => $user->id,
+      'skill_id' => $skillA->id
+    ]);
+
+    $this->assertDatabaseHas('user_skill', [
+      'user_id' => $user->id,
+      'skill_id' => $skillB->id
+    ]);
+
+    $this->assertDatabaseMissing('user_skill', [
+      'user_id' => $user->id,
+      'skill_id' => $skillC->id
     ]);
   }
 
@@ -240,6 +263,33 @@ class UsersModuleTest extends TestCase
       'bio' => 'Programador de Laravel',
       'twitter' => null,
       'user_id' => User::findByEmail('dkbetancourt@gmail.com')->id
+    ]);
+  }
+
+  public function test_skills_array() {
+    $this->from('/usuarios/nuevo')
+         ->post('/usuarios/nuevo', $this->getValidData([
+      'skills' => 'PHP, JS'
+    ]))->assertRedirect('usuarios/nuevo')
+       ->assertSessionHasErrors(['skills']);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'dkbetancourt@gmail.com',
+    ]);
+  }
+
+  public function test_skills_invalid() {
+    $skillA = factory(Skill::class)->create();
+    $skillB = factory(Skill::class)->create();
+
+    $this->from('/usuarios/nuevo')
+         ->post('/usuarios/nuevo', $this->getValidData([
+      'skills' => [$skillA->id, $skillB->id + 1]
+    ]))->assertRedirect('usuarios/nuevo')
+       ->assertSessionHasErrors(['skills']);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'dkbetancourt@gmail.com',
     ]);
   }
 

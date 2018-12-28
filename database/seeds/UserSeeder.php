@@ -34,8 +34,7 @@ class UserSeeder extends Seeder
         // 	'password' => bcrypt('dayan123')
         // ]);
 
-        User::create([
-            'profession_id' => $professionId,
+        $user = factory(User::class)->create([
             'name' => 'Dayan Betancourt',
             'email' => 'dkbetancourt@gmail.com',
             'password' => bcrypt('dayan123'),
@@ -56,13 +55,22 @@ class UserSeeder extends Seeder
         //     'password' => bcrypt('123456')
         // ]);
 
-        factory(User::class)->create([
-            'profession_id' => $professionId,
-            'name' => 'Dulayne Rosales',
-            'email' => 'dulayney@gmail.com',
-            'password' => bcrypt('123456')
+        $user->profile()->create([
+            'bio' => 'Programador, emprendedor y líder de comunidad',
+            'profession_id' => $professionId
         ]);
 
-        factory(User::class, 10)->create();
+        // factory(User::class)->create([
+        //     'profession_id' => $professionId,
+        //     'name' => 'Dulayne Rosales',
+        //     'email' => 'dulayney@gmail.com',
+        //     'password' => bcrypt('123456')
+        // ]);
+
+        factory(User::class, 10)->create()->each(function($user) {
+            $user->profile()->create(
+                factory(\App\UserProfile::class)->raw()
+            );
+        });
     }
 }

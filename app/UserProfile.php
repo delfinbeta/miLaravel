@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class UserProfile extends Model
 {
     protected $fillable = [
-        'bio', 'twitter'
+        'bio', 'twitter', 'profession_id'
     ];
 }

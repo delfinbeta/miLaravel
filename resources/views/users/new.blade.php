@@ -59,6 +59,15 @@
 			<div class="invalid-feedback">{{ $msj_error3 }}</div>
 		</div>
 		<div class="form-group">
+			<label for="profession_id">Profesión</label>
+			<select name="profession_id" id="profession_id" class="form-control">
+				<option value="">Selecciona una Profesión</option>
+				@foreach($professions as $profession)
+				<option value="{{ $profession->id }}" {{ old('profession_id') == $profession->id ? 'selected' : '' }}>{{ $profession->title }}</option>
+				@endforeach
+			</select>
+		</div>
+		<div class="form-group">
 			<label for="bio">Bio:</label>
 			<textarea name="bio" id="bio" class="form-control">{{ old('bio') }}</textarea>
 		</div>

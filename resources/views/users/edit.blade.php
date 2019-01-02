@@ -3,19 +3,22 @@
 @section('title', $title)
 
 @section('content')
-	<h1>{{ $title }}</h1>
-	<hr />
+	@component('shared._card')
+		@slot('header', $title)
 
-	@include('shared._errors')
-	
-	<form method="POST" action="{{ url("usuarios/{$user->id}") }}">
-		{{ method_field('PUT') }}
-		@include('users._fields')
+		@slot('content')
+			@include('shared._errors')
 
-		<div class="form-group mt-4">
-			<button type="submit" class="btn btn-info">Actualizar Usuario</button>
-		</div>
-	</form>
+			<form method="POST" action="{{ url("usuarios/{$user->id}") }}">
+				{{ method_field('PUT') }}
+				@include('users._fields')
+
+				<div class="form-group mt-4">
+					<button type="submit" class="btn btn-info">Actualizar Usuario</button>
+				</div>
+			</form>
+		@endslot
+	@endcomponent
 @endsection
 
 @section('sidebar')

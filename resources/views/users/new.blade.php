@@ -3,18 +3,21 @@
 @section('title', $title)
 
 @section('content')
-	<h1>{{ $title }}</h1>
-	<hr />
+	@card
+		@slot('header', $title)
 
-	@include('shared._errors')
+		@slot('content')
+			@include('shared._errors')
 
-	<form method="POST" action="{{ url('usuarios/nuevo') }}">
-		@include('users._fields')
+			<form method="POST" action="{{ url('usuarios/nuevo') }}">
+				@include('users._fields')
 
-		<div class="form-group mt-4">
-			<button type="submit" class="btn btn-info">Crear Usuario</button>
-		</div>
-	</form>
+				<div class="form-group mt-4">
+					<button type="submit" class="btn btn-info">Crear Usuario</button>
+				</div>
+			</form>
+		@endslot
+	@endcard
 @endsection
 
 @section('sidebar')

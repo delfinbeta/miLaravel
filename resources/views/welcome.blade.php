@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    miLaravel - Curso Styde.net
+                    mi Laravel - Curso Styde.net
                 </div>
 
                 <div class="links">

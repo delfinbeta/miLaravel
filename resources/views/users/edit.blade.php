@@ -5,52 +5,16 @@
 @section('content')
 	<h1>{{ $title }}</h1>
 	<hr />
+
+	@include('shared._errors')
 	
 	<form method="POST" action="{{ url("usuarios/{$user->id}") }}">
 		{{ method_field('PUT') }}
-		{{ csrf_field() }}
+		@include('users._fields')
 
-		<div class="form-group">
-			<?php if($errors->has('name')) {
-							$error1 = 'is-invalid';
-							$msj_error1 = $errors->first('name');
-						} else {
-							$error1 = '';
-							$msj_error1 = '';
-						}
-
-						if($errors->has('email')) {
-							$error2 = 'is-invalid';
-							$msj_error2 = $errors->first('email');
-						} else {
-							$error2 = '';
-							$msj_error2 = '';
-						}
-
-						if($errors->has('password')) {
-							$error3 = 'is-invalid';
-							$msj_error3 = $errors->first('password');
-						} else {
-							$error3 = '';
-							$msj_error3 = '';
-						} ?>
-
-			<label for="name">Nombre:</label>
-			<input type="text" name="name" id="name" class="form-control {{ $error1 }}" value="{{ old('name', $user->name) }}" />
-			<div class="invalid-feedback">{{ $msj_error1 }}</div>
+		<div class="form-group mt-4">
+			<button type="submit" class="btn btn-info">Actualizar Usuario</button>
 		</div>
-		<div class="form-group">
-			<label for="email">Email:</label>
-			<input type="email" name="email" id="email" class="form-control {{ $error2 }}" value="{{ old('email', $user->email) }}" />
-			<div class="invalid-feedback">{{ $msj_error2 }}</div>
-		</div>
-		<div class="form-group">
-			<label for="password">Contraseña:</label>
-			<input type="password" name="password" id="password" class="form-control {{ $error3 }}" />
-			<div class="invalid-feedback">{{ $msj_error3 }}</div>
-		</div>
-
-		<button type="submit" class="btn btn-info">Actualizar Usuario</button>
 	</form>
 @endsection
 

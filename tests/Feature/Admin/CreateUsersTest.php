@@ -1,58 +1,31 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
-use App\User;
-use App\Profession;
-use App\Skill;
+use App\{User, Profession, Skill};
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 
-class UsersModuleTest extends TestCase
+class CreateUsersTest extends TestCase
 {
   use RefreshDatabase;
 
-  protected $profession;
+  protected $defaultData = [
+    'name' => 'Dayan Betancourt',
+    'email' => 'dkbetancourt@gmail.com',
+    'password' => 'dayan123',
+    'profession_id' => '',
+    'bio' => 'Programador de Laravel',
+    'twitter' => 'https://twitter.com/delfinbeta',
+    'role' => 'user'
+  ];
 
   /**
    * A basic test example.
    *
    * @return void
    */
-  public function test_it_loads_users_list() {
-    factory(User::class)->create([
-      'name' => 'Zoraida',
-    ]);
-
-    factory(User::class)->create([
-      'name' => 'Dayan',
-    ]);
-
-    $this->get('/usuarios')
-         ->assertStatus(200)
-         ->assertSee('Usuarios')
-         ->assertSee('Zoraida')
-         ->assertSee('Dayan');
-  }
-
-  public function test_it_loads_users_list_empty() {
-    $this->get('/usuarios')
-         ->assertStatus(200)
-         ->assertSee('No hay usuarios registrados');
-  }
-
-  public function test_it_displays_users_details() {
-    $user = factory(User::class)->create([
-      'name' => 'Dayan Betancourt',
-    ]);
-
-    $this->get("/usuarios/{$user->id}")
-         ->assertStatus(200)
-         ->assertSee('Dayan Betancourt');
-  }
-
   public function test_it_loads_new_user() {
     $profession = factory(Profession::class)->create();
 
@@ -81,12 +54,15 @@ class UsersModuleTest extends TestCase
     //   'twitter' => 'https://twitter.com/delfinbeta'
     // ])->assertRedirect('usuarios');
 
+    $profession = factory(Profession::class)->create();
+
     $skillA = factory(Skill::class)->create();
     $skillB = factory(Skill::class)->create();
     $skillC = factory(Skill::class)->create();
 
     $this->post('/usuarios/nuevo', $this->getValidData([
-      'skills' => [$skillA->id, $skillB->id]
+      'skills' => [$skillA->id, $skillB->id],
+      'profession_id' => $profession->id
     ]))->assertRedirect('usuarios');
 
     // $this->assertDatabaseHas('users', [
@@ -106,7 +82,7 @@ class UsersModuleTest extends TestCase
     $this->assertDatabaseHas('user_profiles', [
       'bio' => 'Programador de Laravel',
       'twitter' => 'https://twitter.com/delfinbeta',
-      'profession_id' => $this->profession->id,
+      'profession_id' => $profession->id,
       'user_id' => $user->id
     ]);
 
@@ -127,6 +103,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_name_required() {
+    $this->handleValidationExceptions();
+
     $this->from('/usuarios/nuevo')
          ->post('/usuarios/nuevo', $this->getValidData([
           'name' => ''
@@ -141,6 +119,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_email_required() {
+    $this->handleValidationExceptions();
+
     $this->from('/usuarios/nuevo')
          ->post('/usuarios/nuevo', $this->getValidData([
           'email' => ''
@@ -153,6 +133,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_email_invalid() {
+    $this->handleValidationExceptions();
+
     $this->from('/usuarios/nuevo')
          ->post('/usuarios/nuevo', $this->getValidData([
           'email' => 'email_no_valido.com'
@@ -165,6 +147,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_email_unique() {
+    $this->handleValidationExceptions();
+
     factory(User::class)->create([
       'email' => 'dkbetancourt@gmail.com'
     ]);
@@ -179,6 +163,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_password_required() {
+    $this->handleValidationExceptions();
+
     $this->from('/usuarios/nuevo')
          ->post('/usuarios/nuevo', $this->getValidData([
           'password' => ''
@@ -191,6 +177,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_password_6caracteres() {
+    $this->handleValidationExceptions();
+
     $this->from('/usuarios/nuevo')
          ->post('/usuarios/nuevo', $this->getValidData([
           'password' => '123'
@@ -203,6 +191,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_role_optional() {
+    $this->handleValidationExceptions();
+
     $this->post('/usuarios/nuevo', $this->getValidData([
       'role' => null
     ]))->assertRedirect('usuarios');
@@ -214,6 +204,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_role_invalid() {
+    $this->handleValidationExceptions();
+
     $this->from('/usuarios/nuevo')
          ->post('/usuarios/nuevo', $this->getValidData([
       'role' => 'invalid-role'
@@ -245,6 +237,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_profession_invalid() {
+    $this->handleValidationExceptions();
+
     $this->from('/usuarios/nuevo')
          ->post('/usuarios/nuevo', $this->getValidData([
       'profession_id' => '999'
@@ -257,6 +251,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_only_profession_no_deleted() {
+    $this->handleValidationExceptions();
+
     $deletedProfession = factory(Profession::class)->create([
       'deleted_at' => now()->format('Y-m-d')
     ]);
@@ -273,6 +269,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_twitter_optional() {
+    $this->handleValidationExceptions();
+
     $this->post('/usuarios/nuevo', $this->getValidData([
       'twitter' => null
     ]))->assertRedirect('usuarios');
@@ -291,6 +289,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_skills_array() {
+    $this->handleValidationExceptions();
+
     $this->from('/usuarios/nuevo')
          ->post('/usuarios/nuevo', $this->getValidData([
       'skills' => 'PHP, JS'
@@ -303,6 +303,8 @@ class UsersModuleTest extends TestCase
   }
 
   public function test_skills_invalid() {
+    $this->handleValidationExceptions();
+    
     $skillA = factory(Skill::class)->create();
     $skillB = factory(Skill::class)->create();
 
@@ -315,173 +317,5 @@ class UsersModuleTest extends TestCase
     $this->assertDatabaseMissing('users', [
       'email' => 'dkbetancourt@gmail.com',
     ]);
-  }
-
-  public function test_it_loads_edit_user() {
-    $user = factory(User::class)->create();
-
-    $this->get("/usuarios/{$user->id}/edit")
-         ->assertStatus(200)
-         ->assertViewIs('users.edit')
-         ->assertSee('Editar Usuario')
-         ->assertViewHas('user', function ($viewUser) use ($user) {
-          return $viewUser->id == $user->id;
-         });
-  }
-
-  public function test_it_update_user() {
-    $user = factory(User::class)->create();
-
-    $this->put("/usuarios/{$user->id}", [
-      'name' => 'Dayan Betancourt',
-      'email' => 'dkbetancourt@gmail.com',
-      'password' => 'dayan123'
-    ])->assertRedirect("/usuarios/{$user->id}");
-
-    $this->assertCredentials([
-      'name' => 'Dayan Betancourt',
-      'email' => 'dkbetancourt@gmail.com',
-      'password' => 'dayan123'
-    ]);
-  }
-
-  public function test_name_required_updating() {
-    $user = factory(User::class)->create();
-
-    $this->from("/usuarios/{$user->id}/edit")
-         ->put("/usuarios/{$user->id}", [
-          'name' => '',
-          'email' => 'dkbetancourt@gmail.com',
-          'password' => 'dayan123'
-         ])->assertRedirect("/usuarios/{$user->id}/edit")
-           ->assertSessionHasErrors(['name']);
-
-    $this->assertDatabaseMissing('users', [
-      'email' => 'dkbetancourt@gmail.com',
-    ]);
-  }
-
-  public function test_email_required_updating() {
-    $user = factory(User::class)->create();
-
-    $this->from("/usuarios/{$user->id}/edit")
-         ->put("/usuarios/{$user->id}", [
-          'name' => 'Dayan Betancourt',
-          'email' => '',
-          'password' => 'dayan123'
-         ])->assertRedirect("/usuarios/{$user->id}/edit")
-           ->assertSessionHasErrors(['email']);
-
-    $this->assertDatabaseMissing('users', [
-      'name' => 'Dayan Betancourt',
-    ]);
-  }
-
-  public function test_email_invalid_updating() {
-    $user = factory(User::class)->create();
-
-    $this->from("/usuarios/{$user->id}/edit")
-         ->put("/usuarios/{$user->id}", [
-          'name' => 'Dayan Betancourt',
-          'email' => 'email_no_valido.com',
-          'password' => 'dayan123'
-         ])->assertRedirect("/usuarios/{$user->id}/edit")
-           ->assertSessionHasErrors(['email']);
-
-    $this->assertDatabaseMissing('users', [
-      'email' => 'email_no_valido.com',
-    ]);
-  }
-
-  public function test_email_same_updating() {
-    $oldEmail = 'dkbetancourt@gmail.com';
-
-    $user = factory(User::class)->create([
-      'email' => $oldEmail
-    ]);
-
-    $this->from("/usuarios/{$user->id}/edit")
-         ->put("/usuarios/{$user->id}", [
-          'name' => 'Dayan Betancourt',
-          'email' => $oldEmail,
-          'password' => ''
-         ])->assertRedirect("/usuarios/{$user->id}");
-
-    $this->assertDatabaseHas('users', [
-      'name' => 'Dayan Betancourt',
-      'email' => $oldEmail
-    ]);
-  }
-
-  public function test_email_unique_updating() {
-    factory(User::class)->create([
-      'email' => 'email-existe@gmail.com'
-    ]);
-
-    $user = factory(User::class)->create([
-      'email' => 'dkbetancourt@gmail.com'
-    ]);
-
-    $this->from("/usuarios/{$user->id}/edit")
-         ->put("/usuarios/{$user->id}", [
-          'name' => 'Dayan Betancourt',
-          'email' => 'email-existe@gmail.com',
-          'password' => 'existe123'
-         ])->assertRedirect("/usuarios/{$user->id}/edit")
-           ->assertSessionHasErrors(['email']);
-
-    // $this->assertEquals(1, User::count());
-  }
-
-  public function test_password_optional_updating() {
-    $oldPassword = 'CLAVE_ANTERIOR';
-
-    $user = factory(User::class)->create([
-      'password' => bcrypt($oldPassword)
-    ]);
-
-    $this->from("/usuarios/{$user->id}/edit")
-         ->put("/usuarios/{$user->id}", [
-          'name' => 'Dayan Betancourt',
-          'email' => 'dkbetancourt@gmail.com',
-          'password' => ''
-         ])->assertRedirect("/usuarios/{$user->id}");
-
-    $this->assertCredentials([
-      'name' => 'Dayan Betancourt',
-      'email' => 'dkbetancourt@gmail.com',
-      'password' => $oldPassword
-    ]);
-  }
-
-  public function test_delete_user() {
-    $user = factory(User::class)->create();
-
-    $this->delete("/usuarios/{$user->id}")
-         ->assertRedirect('usuarios');
-
-    $this->assertDatabaseMissing('users', [
-      'id' => $user->id
-    ]);
-  }
-
-  public function test_404_error_user_not_found() {
-    $this->get('/usuarios/999')
-         ->assertStatus(404)
-         ->assertSee('Página no encontrada');
-  }
-
-  protected function getValidData(array $custom = []) {
-    $this->profession = factory(Profession::class)->create();
-
-    return array_merge([
-      'name' => 'Dayan Betancourt',
-      'email' => 'dkbetancourt@gmail.com',
-      'password' => 'dayan123',
-      'profession_id' => $this->profession->id,
-      'bio' => 'Programador de Laravel',
-      'twitter' => 'https://twitter.com/delfinbeta',
-      'role' => 'user'
-    ], $custom);
   }
 }

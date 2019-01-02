@@ -46,8 +46,9 @@ class UserController extends Controller
 
     $professions = Profession::orderBy('title', 'ASC')->get();
     $skills = Skill::orderBy('name', 'ASC')->get();
+    $roles = trans('users.roles');
 
-    return view('users.new', compact('title', 'professions', 'skills'));
+    return view('users.new', compact('title', 'professions', 'skills', 'roles'));
   }
 
   /**

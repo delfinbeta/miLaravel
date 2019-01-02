@@ -97,7 +97,8 @@ class UsersModuleTest extends TestCase
     $this->assertCredentials([
       'name' => 'Dayan Betancourt',
       'email' => 'dkbetancourt@gmail.com',
-      'password' => 'dayan123'
+      'password' => 'dayan123',
+      'role' => 'user'
     ]);
 
     $user = User::findByEmail('dkbetancourt@gmail.com');
@@ -195,6 +196,29 @@ class UsersModuleTest extends TestCase
           'password' => '123'
          ]))->assertRedirect('/usuarios/nuevo')
            ->assertSessionHasErrors(['password' => 'La contraseña debe contener mínimo 6 caracteres']);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'dkbetancourt@gmail.com',
+    ]);
+  }
+
+  public function test_role_optional() {
+    $this->post('/usuarios/nuevo', $this->getValidData([
+      'role' => null
+    ]))->assertRedirect('usuarios');
+
+    $this->assertDatabaseHas('users', [
+      'email' => 'dkbetancourt@gmail.com',
+      'role' => 'user'
+    ]);
+  }
+
+  public function test_role_invalid() {
+    $this->from('/usuarios/nuevo')
+         ->post('/usuarios/nuevo', $this->getValidData([
+      'role' => 'invalid-role'
+    ]))->assertRedirect('/usuarios/nuevo')
+       ->assertSessionHasErrors(['role']);
 
     $this->assertDatabaseMissing('users', [
       'email' => 'dkbetancourt@gmail.com',
@@ -456,7 +480,8 @@ class UsersModuleTest extends TestCase
       'password' => 'dayan123',
       'profession_id' => $this->profession->id,
       'bio' => 'Programador de Laravel',
-      'twitter' => 'https://twitter.com/delfinbeta'
+      'twitter' => 'https://twitter.com/delfinbeta',
+      'role' => 'user'
     ], $custom);
   }
 }

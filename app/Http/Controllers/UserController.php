@@ -152,7 +152,12 @@ class UserController extends Controller
     $data = request()->validate([
       'name' => 'required',
       'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
-      'password' => ''
+      'password' => '',
+      'role' => '',
+      'profession_id' => '',
+      'bio' => '',
+      'twitter' => '',
+      'skills' => ''
     ]);
 
     if($data['password'] != null) {
@@ -161,7 +166,14 @@ class UserController extends Controller
       unset($data['password']);
     }
 
-    $user->update($data);
+    // $user->update($data);
+    $user->fill($data);
+
+    $user->role = $data['role'];
+    $user->save();
+    $user->profile->update($data);
+
+    $user->skills()->sync($data['skills'] ?? []);
 
     return redirect()->route('users.show', ['user' => $user]);
   }

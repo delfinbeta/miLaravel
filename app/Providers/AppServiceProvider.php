@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\{Schema, Blade};
+use Illuminate\Support\Facades\{Schema, Blade, View};
+use App\Http\ViewComposers\UserFieldsComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Blade::component('shared._card', 'card');
+        View::composer(['users.new', 'users.edit'], UserFieldsComposer::class);
     }
 
     /**

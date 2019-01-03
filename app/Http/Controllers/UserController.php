@@ -44,13 +44,15 @@ class UserController extends Controller
   {
     $title = "Crear Nuevo Usuario";
 
-    $professions = Profession::orderBy('title', 'ASC')->get();
-    $skills = Skill::orderBy('name', 'ASC')->get();
-    $roles = trans('users.roles');
+    // $professions = Profession::orderBy('title', 'ASC')->get();
+    // $skills = Skill::orderBy('name', 'ASC')->get();
+    // $roles = trans('users.roles');
 
     $user = new User;
 
-    return view('users.new', compact('title', 'professions', 'skills', 'roles', 'user'));
+    // return view('users.new', compact('title', 'professions', 'skills', 'roles', 'user'));
+
+    return view('users.new', compact('title', 'user'));
   }
 
   /**
@@ -113,11 +115,7 @@ class UserController extends Controller
   {
     $title = 'Editar Usuario';
 
-    $professions = Profession::orderBy('title', 'ASC')->get();
-    $skills = Skill::orderBy('name', 'ASC')->get();
-    $roles = trans('users.roles');
-
-    return view('users.edit', compact('title', 'user', 'professions', 'skills', 'roles'));
+    return view('users.edit', compact('title', 'user'));
   }
 
   /**

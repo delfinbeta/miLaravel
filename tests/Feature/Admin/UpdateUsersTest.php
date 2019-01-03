@@ -226,4 +226,21 @@ class UpdateUsersTest extends TestCase
       'password' => $oldPassword
     ]);
   }
+
+  public function test_role_required() {
+    $this->handleValidationExceptions();
+
+    $user = factory(User::class)->create();
+
+    $this->from("/usuarios/{$user->id}/edit")
+         ->put("/usuarios/{$user->id}", $this->getValidData([
+          'role' => ''
+         ]))
+         ->assertRedirect("/usuarios/{$user->id}/edit")
+         ->assertSessionHasErrors(['role']);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'dkbetancourt@gmail.com',
+    ]);
+  }
 }

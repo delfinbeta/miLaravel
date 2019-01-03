@@ -6,7 +6,7 @@ use App\{User, Profession, UserProfile, Skill};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\{CreateUserRequest, UpdateUserRequest};
 use App\Http\Forms\UserForm;
 
 class UserController extends Controller
@@ -141,7 +141,7 @@ class UserController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, User $user)
+  public function update(UpdateUserRequest $request, User $user)
   {
     // $data = request()->validate([
     //   'name' => 'required',
@@ -149,31 +149,34 @@ class UserController extends Controller
     //   'password' => ''
     // ]);
 
-    $data = request()->validate([
-      'name' => 'required',
-      'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
-      'password' => '',
-      'role' => '',
-      'profession_id' => '',
-      'bio' => '',
-      'twitter' => '',
-      'skills' => ''
-    ]);
+    // $data = request()->validate([
+    //   'name' => 'required',
+    //   'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+    //   'password' => '',
+    //   'role' => '',
+    //   'profession_id' => '',
+    //   'bio' => '',
+    //   'twitter' => '',
+    //   'skills' => ''
+    // ]);
 
-    if($data['password'] != null) {
-      $data['password'] = bcrypt($data['password']);
-    } else {
-      unset($data['password']);
-    }
+    // $data = $request->validated();
 
-    // $user->update($data);
-    $user->fill($data);
+    // if($data['password'] != null) {
+    //   $data['password'] = bcrypt($data['password']);
+    // } else {
+    //   unset($data['password']);
+    // }
 
-    $user->role = $data['role'];
-    $user->save();
-    $user->profile->update($data);
+    // // $user->update($data);
+    // $user->fill($data);
 
-    $user->skills()->sync($data['skills'] ?? []);
+    // $user->role = $data['role'];
+    // $user->save();
+    // $user->profile->update($data);
+
+    // $user->skills()->sync($data['skills'] ?? []);
+    $request->updateUser($user);
 
     return redirect()->route('users.show', ['user' => $user]);
   }

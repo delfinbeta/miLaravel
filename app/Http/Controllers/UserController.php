@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Forms\UserForm;
 
 class UserController extends Controller
 {
@@ -48,11 +49,14 @@ class UserController extends Controller
     // $skills = Skill::orderBy('name', 'ASC')->get();
     // $roles = trans('users.roles');
 
-    $user = new User;
+    // $user = new User;
 
     // return view('users.new', compact('title', 'professions', 'skills', 'roles', 'user'));
 
-    return view('users.new', compact('title', 'user'));
+    // return view('users.new', compact('title', 'user'))
+    //   ->with($this->formsData());
+
+    return new UserForm('users.new', $title, new User);
   }
 
   /**
@@ -115,8 +119,20 @@ class UserController extends Controller
   {
     $title = 'Editar Usuario';
 
-    return view('users.edit', compact('title', 'user'));
+    // return view('users.edit', compact('title', 'user'))
+    //   ->with($this->formsData());
+
+    return new UserForm('users.edit', $title, $user);
   }
+
+  // protected function formsData()
+  // {
+  //   return [
+  //     'professions' => Profession::orderBy('title', 'ASC')->get(),
+  //     'skills' => Skill::orderBy('name', 'ASC')->get(),
+  //     'roles' => trans('users.roles'),
+  //   ];
+  // }
 
   /**
    * Update the specified resource in storage.

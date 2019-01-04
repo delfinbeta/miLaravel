@@ -27,11 +27,19 @@
 	      	<a href="{{ route('users.edit', $user) }}" class="btn btn-outline-warning" role="button">Editar</a>
 	      </td>
 	      <td>
+	      	@if($user->trashed())
 	      	<form method="POST" action="{{ route('users.delete', $user) }}">
 	      		{{ method_field('DELETE') }}
 	      		{{ csrf_field() }}
-	      		<button type="submit" class="btn btn-outline-danger">Eliminar</button>
+	      		<button type="submit" class="btn btn-danger">Eliminar</button>
 	      	</form>
+	      	@else
+	      	<form method="POST" action="{{ route('users.trash', $user) }}">
+	      		{{ method_field('PATCH') }}
+	      		{{ csrf_field() }}
+	      		<button type="submit" class="btn btn-outline-danger">Borrar</button>
+	      	</form>
+	      	@endif
 	      </td>
 	    </tr>
 	    @endforeach

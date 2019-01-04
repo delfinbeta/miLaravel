@@ -25,6 +25,7 @@ class CreateUserProfilesTable extends Migration
                 ->on('users')
                 ->onDelete('CASCADE');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

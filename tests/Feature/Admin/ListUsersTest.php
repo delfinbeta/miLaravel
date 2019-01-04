@@ -37,4 +37,21 @@ class ListUsersTest extends TestCase
          ->assertStatus(200)
          ->assertSee('No hay usuarios registrados');
   }
+
+  public function test_it_loads_deleted_users_list() {
+    factory(User::class)->create([
+      'name' => 'Zoraida',
+      'deleted_at' => now()
+    ]);
+
+    factory(User::class)->create([
+      'name' => 'Dayan',
+    ]);
+
+    $this->get('/usuarios/papelera')
+         ->assertStatus(200)
+         ->assertSee('Listado de Usuarios en la Papelera')
+         ->assertSee('Zoraida')
+         ->assertDontSee('Dayan');
+  }
 }

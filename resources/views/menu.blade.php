@@ -15,6 +15,12 @@
       <li class="nav-item">
         <a class="nav-link" href="{{ asset('perfil/') }}">Mi Perfil</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ asset('profesiones/') }}">Profesiones</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ asset('habilidades/') }}">Habilidades</a>
+      </li>
     </ul>
     <form class="form-inline mt-2 mt-md-0">
       <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">

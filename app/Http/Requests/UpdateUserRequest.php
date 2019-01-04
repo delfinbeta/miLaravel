@@ -31,7 +31,7 @@ class UpdateUserRequest extends FormRequest
         'required', 'email', 
         Rule::unique('users')->ignore($this->user)
       ],
-      'password' => 'min:6',
+      'password' => '',
       'role' => [
         'required',
         Rule::in(Role::getList())

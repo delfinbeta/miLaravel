@@ -205,27 +205,27 @@ class UpdateUsersTest extends TestCase
     // $this->assertEquals(1, User::count());
   }
 
-  public function test_password_optional() {
-    $this->handleValidationExceptions();
+  // public function test_password_optional() {
+  //   $this->handleValidationExceptions();
 
-    $oldPassword = 'CLAVE_ANTERIOR';
+  //   $oldPassword = 'CLAVE_ANTERIOR';
 
-    $user = factory(User::class)->create([
-      'password' => bcrypt($oldPassword)
-    ]);
+  //   $user = factory(User::class)->create([
+  //     'password' => bcrypt($oldPassword)
+  //   ]);
 
-    $this->from("/usuarios/{$user->id}/edit")
-         ->put("/usuarios/{$user->id}", $this->getValidData([
-          'password' => ''
-         ]))
-         ->assertRedirect("/usuarios/{$user->id}");
+  //   $this->from("/usuarios/{$user->id}/edit")
+  //        ->put("/usuarios/{$user->id}", $this->getValidData([
+  //         'password' => ''
+  //        ]))
+  //        ->assertRedirect("/usuarios/{$user->id}");
 
-    $this->assertCredentials([
-      'name' => 'Dayan Betancourt',
-      'email' => 'dkbetancourt@gmail.com',
-      'password' => $oldPassword
-    ]);
-  }
+  //   $this->assertCredentials([
+  //     'name' => 'Dayan Betancourt',
+  //     'email' => 'dkbetancourt@gmail.com',
+  //     'password' => $oldPassword
+  //   ]);
+  // }
 
   public function test_role_required() {
     $this->handleValidationExceptions();

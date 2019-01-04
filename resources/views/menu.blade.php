@@ -13,10 +13,7 @@
         <a class="nav-link" href="{{ asset('usuarios/nuevo') }}">Usuario Nuevo</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ asset('usuarios/5') }}">Usuario 5</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ asset('usuarios/5/edit') }}">Editar Usuario 5</a>
+        <a class="nav-link" href="{{ asset('perfil/') }}">Mi Perfil</a>
       </li>
     </ul>
     <form class="form-inline mt-2 mt-md-0">

@@ -45,6 +45,7 @@
 	    @endforeach
 	  </tbody>
 	</table>
+	{{ $users->render() }}
 	@else
 	<div class="alert alert-danger">
 		No hay usuarios registrados

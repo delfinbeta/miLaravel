@@ -27,7 +27,8 @@ class UserController extends Controller
     // }
 
     // $users = DB::table('users')->get();
-    $users = User::all();
+    // $users = User::all();
+    $users = User::orderBy('created_at', 'DESC')->paginate(15);
 
     // return view('users.index')
     //   ->with('title', $title)

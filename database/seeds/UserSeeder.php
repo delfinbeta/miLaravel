@@ -67,10 +67,10 @@ class UserSeeder extends Seeder
         //     'password' => bcrypt('123456')
         // ]);
 
-        factory(User::class, 10)->create()->each(function($user) {
-            $user->profile()->create(
-                factory(\App\UserProfile::class)->raw()
-            );
+        factory(User::class, 999)->create()->each(function($user) {
+            factory(\App\UserProfile::class)->create([
+                'user_id' => $user->id
+            ]);
         });
     }
 }

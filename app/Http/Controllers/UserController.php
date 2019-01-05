@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\{User, Profession, UserProfile, Skill};
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use App\Http\Requests\{CreateUserRequest, UpdateUserRequest};
 use App\Http\Forms\UserForm;
+// use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\DB;
+// use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -28,7 +28,13 @@ class UserController extends Controller
 
     // $users = DB::table('users')->get();
     // $users = User::all();
-    $users = User::orderBy('created_at', 'DESC')->paginate(15);
+    $users = User::query()
+      ->when(request('search'), function($query, $search) {
+        $query->where('name', 'like', "%{$search}%")
+              ->orWhere('email', 'like', "%{$search}%");
+      })
+      ->orderBy('created_at', 'DESC')
+      ->paginate(15);
 
     // return view('users.index')
     //   ->with('title', $title)

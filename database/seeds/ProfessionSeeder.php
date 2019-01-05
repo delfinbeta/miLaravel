@@ -19,9 +19,9 @@ class ProfessionSeeder extends Seeder
         //     'title' => 'Frontend Developer',
         // ]);
 
-        Profession::create([
-            'title' => 'Prueba Borrar',
-        ]);
+        // Profession::create([
+        //     'title' => 'Prueba Borrar',
+        // ]);
 
         Profession::create([
             'title' => 'Frontend Developer',
@@ -35,8 +35,8 @@ class ProfessionSeeder extends Seeder
             'title' => 'Diseñador Web',
         ]);
 
-        DB::table('professions')->where('id', 1)->delete();
+        // DB::table('professions')->where('id', 1)->delete();
 
-        factory(Profession::class, 6)->create();
+        // factory(Profession::class, 6)->create();
     }
 }

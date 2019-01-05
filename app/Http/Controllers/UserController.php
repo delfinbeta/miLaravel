@@ -186,7 +186,7 @@ class UserController extends Controller
   {
     $title = 'Listado de Usuarios en la Papelera';
 
-    $users = User::onlyTrashed()->get();
+    $users = User::onlyTrashed()->paginate();
 
     return view('users.index', compact('title', 'users'));
   }

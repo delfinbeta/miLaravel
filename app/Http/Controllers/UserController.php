@@ -29,6 +29,7 @@ class UserController extends Controller
     // $users = DB::table('users')->get();
     // $users = User::all();
     $users = User::query()
+      ->with('team', 'profile', 'skills')
       ->when(request('team'), function($query, $team) {
         if($team === 'with_team') {
           $query->has('team');

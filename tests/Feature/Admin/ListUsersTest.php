@@ -30,6 +30,8 @@ class ListUsersTest extends TestCase
          ->assertSee('Usuarios')
          ->assertSee('Zoraida')
          ->assertSee('Dayan');
+
+    $this->assertNotRepeatedQueries();
   }
 
   public function test_it_loads_users_paginates() {

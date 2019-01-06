@@ -41,6 +41,8 @@ class UserController extends Controller
       ->orderBy('created_at', 'DESC')
       ->paginate(15);
 
+    $users->appends(request('search'));
+
     // return view('users.index')
     //   ->with('title', $title)
     //   ->with('users', $users);

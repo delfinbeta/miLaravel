@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+// use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -59,7 +60,8 @@ class User extends Authenticatable
     if(empty($search)) { return; }
 
     $query->where(function($query) use ($search) {
-      $query->where('first_name', 'like', "%{$search}%")
+      // $query->where(DB::raw('CONCAT(first_name, " ", last_name)'), 'like', "%{$search}%")
+      $query->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%{$search}%")
             ->orWhere('email', 'like', "%{$search}%")
             ->orWhereHas('team', function($query) use ($search) {
               $query->where('name', 'like', "%{$search}%");

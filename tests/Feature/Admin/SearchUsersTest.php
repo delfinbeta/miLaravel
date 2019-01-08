@@ -16,7 +16,7 @@ class SearchUsersTest extends TestCase
    *
    * @return void
    */
-  public function test_search_users_name() {
+  public function test_search_users_first_name() {
     $usuario1 = factory(User::class)->create([
       'first_name' => 'Dayan',
     ]);
@@ -32,7 +32,7 @@ class SearchUsersTest extends TestCase
          });
   }
 
-  public function test_search_partial_users_name() {
+  public function test_search_partial_users_first_name() {
     $usuario1 = factory(User::class)->create([
       'first_name' => 'Dayan',
     ]);
@@ -45,6 +45,42 @@ class SearchUsersTest extends TestCase
          ->assertStatus(200)
          ->assertViewHas('users', function($users) use ($usuario1, $usuario2) {
          	return $users->contains($usuario1) && !$users->contains($usuario2);
+         });
+  }
+
+  public function test_search_users_full_name() {
+    $usuario1 = factory(User::class)->create([
+      'first_name' => 'Dayan',
+      'last_name' => 'Betancourt',
+    ]);
+
+    $usuario2 = factory(User::class)->create([
+      'first_name' => 'Carlos',
+      'last_name' => 'Mora',
+    ]);
+
+    $this->get('/usuarios?search=Dayan Betancourt')
+         ->assertStatus(200)
+         ->assertViewHas('users', function($users) use ($usuario1, $usuario2) {
+          return $users->contains($usuario1) && !$users->contains($usuario2);
+         });
+  }
+
+  public function test_search_partial_users_full_name() {
+    $usuario1 = factory(User::class)->create([
+      'first_name' => 'Dayan',
+      'last_name' => 'Betancourt',
+    ]);
+
+    $usuario2 = factory(User::class)->create([
+      'first_name' => 'Carlos',
+      'last_name' => 'Mora',
+    ]);
+
+    $this->get('/usuarios?search=Dayan Bet')
+         ->assertStatus(200)
+         ->assertViewHas('users', function($users) use ($usuario1, $usuario2) {
+          return $users->contains($usuario1) && !$users->contains($usuario2);
          });
   }
 

@@ -18,11 +18,11 @@ class SearchUsersTest extends TestCase
    */
   public function test_search_users_name() {
     $usuario1 = factory(User::class)->create([
-      'name' => 'Dayan',
+      'first_name' => 'Dayan',
     ]);
 
     $usuario2 = factory(User::class)->create([
-      'name' => 'Zoraida',
+      'first_name' => 'Zoraida',
     ]);
 
     $this->get('/usuarios?search=Dayan')
@@ -34,11 +34,11 @@ class SearchUsersTest extends TestCase
 
   public function test_search_partial_users_name() {
     $usuario1 = factory(User::class)->create([
-      'name' => 'Dayan',
+      'first_name' => 'Dayan',
     ]);
 
     $usuario2 = factory(User::class)->create([
-      'name' => 'Zoraida',
+      'first_name' => 'Zoraida',
     ]);
 
     $this->get('/usuarios?search=Day')
@@ -82,17 +82,17 @@ class SearchUsersTest extends TestCase
 
   public function test_search_users_team_name() {
     $usuario1 = factory(User::class)->create([
-      'name' => 'Dayan',
+      'first_name' => 'Dayan',
       'team_id' => factory(Team::class)->create(['name' => 'Equipo'])->id
     ]);
 
     $usuario2 = factory(User::class)->create([
-      'name' => 'Zoraida',
+      'first_name' => 'Zoraida',
       'team_id' => null
     ]);
 
     $usuario3 = factory(User::class)->create([
-      'name' => 'Carlos',
+      'first_name' => 'Carlos',
       'team_id' => factory(Team::class)->create(['name' => 'Team'])->id
     ]);
 
@@ -107,17 +107,17 @@ class SearchUsersTest extends TestCase
 
   public function test_search_partial_users_team_name() {
     $usuario1 = factory(User::class)->create([
-      'name' => 'Dayan',
+      'first_name' => 'Dayan',
       'team_id' => factory(Team::class)->create(['name' => 'Equipo'])->id
     ]);
 
     $usuario2 = factory(User::class)->create([
-      'name' => 'Zoraida',
+      'first_name' => 'Zoraida',
       'team_id' => null
     ]);
 
     $usuario3 = factory(User::class)->create([
-      'name' => 'Carlos',
+      'first_name' => 'Carlos',
       'team_id' => factory(Team::class)->create(['name' => 'Team'])->id
     ]);
 

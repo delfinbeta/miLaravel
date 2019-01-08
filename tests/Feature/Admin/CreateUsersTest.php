@@ -12,7 +12,8 @@ class CreateUsersTest extends TestCase
   use RefreshDatabase;
 
   protected $defaultData = [
-    'name' => 'Dayan Betancourt',
+    'first_name' => 'Dayan',
+    'last_name' => 'Betancourt',
     'email' => 'dkbetancourt@gmail.com',
     'password' => 'dayan123',
     'profession_id' => '',
@@ -71,7 +72,8 @@ class CreateUsersTest extends TestCase
     // ]);
 
     $this->assertCredentials([
-      'name' => 'Dayan Betancourt',
+      'first_name' => 'Dayan',
+      'last_name' => 'Betancourt',
       'email' => 'dkbetancourt@gmail.com',
       'password' => 'dayan123',
       'role' => 'user'
@@ -102,14 +104,30 @@ class CreateUsersTest extends TestCase
     ]);
   }
 
-  public function test_name_required() {
+  public function test_first_name_required() {
     $this->handleValidationExceptions();
 
     $this->from('/usuarios/nuevo')
          ->post('/usuarios/nuevo', $this->getValidData([
-          'name' => ''
+          'first_name' => ''
          ]))->assertRedirect('/usuarios/nuevo')
-           ->assertSessionHasErrors(['name' => 'El campo nombre es obligatorio']);
+           ->assertSessionHasErrors(['first_name' => 'El campo nombre es obligatorio']);
+
+    // $this->assertEquals(0, User::count());
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'dkbetancourt@gmail.com',
+    ]);
+  }
+
+  public function test_last_name_required() {
+    $this->handleValidationExceptions();
+
+    $this->from('/usuarios/nuevo')
+         ->post('/usuarios/nuevo', $this->getValidData([
+          'last_name' => ''
+         ]))->assertRedirect('/usuarios/nuevo')
+           ->assertSessionHasErrors(['last_name' => 'El campo apellido es obligatorio']);
 
     // $this->assertEquals(0, User::count());
 
@@ -224,7 +242,8 @@ class CreateUsersTest extends TestCase
     ]))->assertRedirect('usuarios');
 
     $this->assertCredentials([
-      'name' => 'Dayan Betancourt',
+      'first_name' => 'Dayan',
+      'last_name' => 'Betancourt',
       'email' => 'dkbetancourt@gmail.com',
       'password' => 'dayan123',
     ]);
@@ -276,7 +295,8 @@ class CreateUsersTest extends TestCase
     ]))->assertRedirect('usuarios');
 
     $this->assertCredentials([
-      'name' => 'Dayan Betancourt',
+      'first_name' => 'Dayan',
+      'last_name' => 'Betancourt',
       'email' => 'dkbetancourt@gmail.com',
       'password' => 'dayan123'
     ]);

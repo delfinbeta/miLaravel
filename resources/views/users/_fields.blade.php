@@ -1,43 +1,56 @@
 {{ csrf_field() }}
 
-<?php if($errors->has('name')) {
+<?php if($errors->has('first_name')) {
 				$error1 = 'is-invalid';
-				$msj_error1 = $errors->first('name');
+				$msj_error1 = $errors->first('first_name');
 			} else {
 				$error1 = '';
 				$msj_error1 = '';
 			}
 
-			if($errors->has('email')) {
+			if($errors->has('last_name')) {
 				$error2 = 'is-invalid';
-				$msj_error2 = $errors->first('email');
+				$msj_error2 = $errors->first('last_name');
 			} else {
 				$error2 = '';
 				$msj_error2 = '';
 			}
 
-			if($errors->has('password')) {
+			if($errors->has('email')) {
 				$error3 = 'is-invalid';
-				$msj_error3 = $errors->first('password');
+				$msj_error3 = $errors->first('email');
 			} else {
 				$error3 = '';
 				$msj_error3 = '';
+			}
+
+			if($errors->has('password')) {
+				$error4 = 'is-invalid';
+				$msj_error4 = $errors->first('password');
+			} else {
+				$error4 = '';
+				$msj_error4 = '';
 			} ?>
 
 <div class="form-group">
-	<label for="name">Nombre:</label>
-	<input type="text" name="name" id="name" class="form-control {{ $error1 }}" value="{{ old('name', $user->name) }}" />
+	<label for="first_name">Nombre:</label>
+	<input type="text" name="first_name" id="first_name" class="form-control {{ $error1 }}" value="{{ old('first_name', $user->first_name) }}" />
 	<div class="invalid-feedback">{{ $msj_error1 }}</div>
 </div>
 <div class="form-group">
-	<label for="email">Email:</label>
-	<input type="email" name="email" id="email" class="form-control {{ $error2 }}" value="{{ old('email', $user->email) }}" />
+	<label for="last_name">Apellido:</label>
+	<input type="text" name="last_name" id="last_name" class="form-control {{ $error2 }}" value="{{ old('last_name', $user->last_name) }}" />
 	<div class="invalid-feedback">{{ $msj_error2 }}</div>
 </div>
 <div class="form-group">
-	<label for="password">Contraseña:</label>
-	<input type="password" name="password" id="password" class="form-control {{ $error3 }}" />
+	<label for="email">Email:</label>
+	<input type="email" name="email" id="email" class="form-control {{ $error3 }}" value="{{ old('email', $user->email) }}" />
 	<div class="invalid-feedback">{{ $msj_error3 }}</div>
+</div>
+<div class="form-group">
+	<label for="password">Contraseña:</label>
+	<input type="password" name="password" id="password" class="form-control {{ $error4 }}" />
+	<div class="invalid-feedback">{{ $msj_error4 }}</div>
 </div>
 <div class="form-group">
 	<label for="profession_id">Profesión</label>

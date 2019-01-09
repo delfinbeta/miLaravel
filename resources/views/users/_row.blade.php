@@ -2,7 +2,8 @@
   <td rowspan="2">{{ $user->id }}</td>
   <th scope="row">
   	{{ $user->name }}
-    @if($user->active)
+    {{-- @if($user->active) --}}
+    @if($user->state == 'active')
     <i class="text-success fas fa-toggle-on"></i>
     @else
     <i class="text-danger fas fa-toggle-off"></i>

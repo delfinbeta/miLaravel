@@ -19,7 +19,9 @@ class CreateUsersTest extends TestCase
     'profession_id' => '',
     'bio' => 'Programador de Laravel',
     'twitter' => 'https://twitter.com/delfinbeta',
-    'role' => 'user'
+    'role' => 'user',
+    // 'active' => true
+    'state' => 'active'
   ];
 
   /**
@@ -76,7 +78,8 @@ class CreateUsersTest extends TestCase
       'last_name' => 'Betancourt',
       'email' => 'dkbetancourt@gmail.com',
       'password' => 'dayan123',
-      'role' => 'user'
+      'role' => 'user',
+      'active' => true
     ]);
 
     $user = User::findByEmail('dkbetancourt@gmail.com');
@@ -229,6 +232,35 @@ class CreateUsersTest extends TestCase
       'role' => 'invalid-role'
     ]))->assertRedirect('/usuarios/nuevo')
        ->assertSessionHasErrors(['role']);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'dkbetancourt@gmail.com',
+    ]);
+  }
+
+  public function test_state_required() {
+    $this->handleValidationExceptions();
+
+    $this->from('/usuarios/nuevo')
+         ->post('/usuarios/nuevo', $this->getValidData([
+          'state' => null
+         ]))->assertSessionHasErrors(['state']);
+
+    // $this->assertEquals(0, User::count());
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'dkbetancourt@gmail.com',
+    ]);
+  }
+
+  public function test_state_invalid() {
+    $this->handleValidationExceptions();
+
+    $this->from('/usuarios/nuevo')
+         ->post('/usuarios/nuevo', $this->getValidData([
+      'state' => 'invalid-state'
+    ]))->assertRedirect('/usuarios/nuevo')
+       ->assertSessionHasErrors(['state']);
 
     $this->assertDatabaseMissing('users', [
       'email' => 'dkbetancourt@gmail.com',

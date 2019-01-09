@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 // use Illuminate\Support\Facades\DB;
+// use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -35,6 +36,18 @@ class User extends Authenticatable
     //
   ];
 
+  /**
+   * Create a new Eloquent query builder for the model.
+   *
+   * @param  \Illuminate\Database\Query\Builder   $query
+   * @return \Illuminate\Database\Eloquent\Builder|static
+   */
+  public function newEloquentBuilder($query)
+  {
+    // return new Builder($query);
+    return new UserQuery($query);
+  }
+
   public function profile() {
     return $this->hasOne(UserProfile::class)->withDefault();
   }
@@ -51,44 +64,8 @@ class User extends Authenticatable
     return $this->role === 'admin';
   }
 
-  public static function findByEmail($email) {
-    return static::where(compact('email'))->first();
-  }
-
   public function getNameAttribute() {
     return "{$this->first_name} {$this->last_name}";
-  }
-
-  public function scopeSearch($query, $search)
-  {
-    if(empty($search)) { return; }
-
-    $query->where(function($query) use ($search) {
-      // $query->where(DB::raw('CONCAT(first_name, " ", last_name)'), 'like', "%{$search}%")
-      $query->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%{$search}%")
-            ->orWhere('email', 'like', "%{$search}%")
-            ->orWhereHas('team', function($query) use ($search) {
-              $query->where('name', 'like', "%{$search}%");
-            });
-    });
-  }
-
-  public function scopeByState($query, $state)
-  {
-    if($state == 'active') {
-      return $query->where('active', true);
-    }
-
-    if($state == 'inactive') {
-      return $query->where('active', false);
-    }
-  }
-
-  public function scopeByRole($query, $role)
-  {
-    if(in_array($role, ['user', 'admin'])) {
-      $query->where('role', $role);
-    }
   }
 
   public function setStateAttribute($value)

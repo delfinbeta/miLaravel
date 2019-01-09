@@ -43,6 +43,7 @@ class UserController extends Controller
 
     $users = User::query()
       ->with('team', 'profile', 'skills', 'profile.profession')
+      ->byState(request('state'))
       ->search(request('search'))
       ->orderBy('created_at', 'DESC')
       ->paginate(15);

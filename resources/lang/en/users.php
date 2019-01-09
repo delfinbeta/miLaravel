@@ -5,7 +5,7 @@ return [
 	'states' => ['active' => 'Activo', 'inactive' => 'Inactivo'],
 
 	'filters' => [
-		'roles' => ['all' => 'Rol', 'admins' => 'Administradores', 'users' => 'Usuarios'],
+		'roles' => ['all' => 'Rol', 'admin' => 'Administradores', 'user' => 'Usuarios'],
 		'states' => ['all' => 'Todos', 'active' => 'Solo Activos', 'inactive' => 'Solo Inactivos']
 	]
 ];

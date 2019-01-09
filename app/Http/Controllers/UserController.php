@@ -44,6 +44,7 @@ class UserController extends Controller
     $users = User::query()
       ->with('team', 'profile', 'skills', 'profile.profession')
       ->byState(request('state'))
+      ->byRole(request('role'))
       ->search(request('search'))
       ->orderBy('created_at', 'DESC')
       ->paginate(15);
@@ -58,10 +59,11 @@ class UserController extends Controller
     return view('users.index', [
       'title' => $title,
       'users' => $users,
-      'roles' => trans('users.filters.roles'),
+      // 'roles' => trans('users.filters.roles'),
       'skills' => Skill::orderBy('name')->get(),
-      'states' => trans('users.filters.states'),
-      'checkedSkills' => array_wrap(request('skills'))
+      // 'states' => trans('users.filters.states'),
+      'checkedSkills' => array_wrap(request('skills')),
+      'showFilters' => true
     ]);
   }
 
@@ -216,7 +218,11 @@ class UserController extends Controller
 
     $users = User::onlyTrashed()->paginate();
 
-    return view('users.index', compact('title', 'users'));
+    return view('users.index', [
+      'title' => $title,
+      'users' => $users,
+      'showFilters' => false
+    ]);
   }
 
   public function trash(User $user)

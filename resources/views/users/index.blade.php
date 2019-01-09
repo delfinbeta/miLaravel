@@ -6,13 +6,18 @@
 	<div class="d-flex justify-content-between align-items-end">
     <h1 class="pb-1">{{ $title }}</h1>
     <p>
+    	@if($showFilters)
+      <a href="{{ route('users.trashed') }}" class="btn btn-danger">Ver Papelera <i class="fas fa-trash-alt"></i></a>
       <a href="{{ route('users.create') }}" class="btn btn-success">Nuevo usuario <i class="fas fa-plus"></i></a>
+      @else
+      <a href="{{ route('users.list') }}" class="btn btn-success"><i class="fas fa-arrow-left"></i> Volver al Listado de Usuarios</a>
+      @endif
     </p>
   </div>
 	<hr style="margin-top: 0;" />
 	
 	{{-- @include('users._filters') --}}
-	@includeWhen(isset($states), 'users._filters')
+	@includeWhen($showFilters, 'users._filters')
 
 	@if($users->isNotEmpty())
 	<p>Viendo página {{ $users->currentPage() }} de {{ $users->lastPage() }}</p>

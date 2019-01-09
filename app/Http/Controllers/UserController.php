@@ -28,15 +28,21 @@ class UserController extends Controller
 
     // $users = DB::table('users')->get();
     // $users = User::all();
+    // $users = User::query()
+    //   ->with('team', 'profile', 'skills', 'profile.profession')
+    //   ->when(request('team'), function($query, $team) {
+    //     if($team === 'with_team') {
+    //       $query->has('team');
+    //     } elseif($team === 'without_team') {
+    //       $query->doesntHave('team');
+    //     }
+    //   })
+    //   ->search(request('search'))
+    //   ->orderBy('created_at', 'DESC')
+    //   ->paginate(15);
+
     $users = User::query()
-      ->with('team', 'profile', 'skills')
-      ->when(request('team'), function($query, $team) {
-        if($team === 'with_team') {
-          $query->has('team');
-        } elseif($team === 'without_team') {
-          $query->doesntHave('team');
-        }
-      })
+      ->with('team', 'profile', 'skills', 'profile.profession')
       ->search(request('search'))
       ->orderBy('created_at', 'DESC')
       ->paginate(15);
@@ -47,7 +53,15 @@ class UserController extends Controller
     //   ->with('title', $title)
     //   ->with('users', $users);
 
-    return view('users.index', compact('title', 'users'));
+    // return view('users.index', compact('title', 'users'));
+    return view('users.index', [
+      'title' => $title,
+      'users' => $users,
+      'roles' => trans('users.filters.roles'),
+      'skills' => Skill::orderBy('name')->get(),
+      'states' => trans('users.filters.states'),
+      'checkedSkills' => array_wrap(request('skills'))
+    ]);
   }
 
   /**

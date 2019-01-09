@@ -10,7 +10,9 @@
     </p>
   </div>
 	<hr style="margin-top: 0;" />
-	@include('users._filters')
+	
+	{{-- @include('users._filters') --}}
+	@includeWhen(isset($states), 'users._filters')
 
 	@if($users->isNotEmpty())
 	<p>Viendo página {{ $users->currentPage() }} de {{ $users->lastPage() }}</p>

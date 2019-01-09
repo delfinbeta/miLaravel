@@ -33,5 +33,7 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="DB_DATABASE" value="milaravel_test"/>
+        <env name="DEBUGBAR_ENABLE" value="false"/>
+        <env name="QUERY_DETECTOR_ENABLE" value="false"/>
     </php>
 </phpunit>

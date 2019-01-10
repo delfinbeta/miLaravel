@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{User, Profession, UserProfile, Skill};
+use App\{User, Profession, UserProfile, Skill, UserFilter};
 use App\Http\Requests\{CreateUserRequest, UpdateUserRequest};
 use App\Http\Forms\UserForm;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class UserController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index(Request $request)
+  public function index(Request $request, UserFilter $filters)
   {
     $title = 'Listado de Usuarios';
 
@@ -51,11 +51,13 @@ class UserController extends Controller
     $users = User::query()
       ->with('team', 'profile', 'skills', 'profile.profession')
       // ->filterBy($request->all(['state', 'role', 'search']))
-      ->filterBy($request->only(['state', 'role', 'search']))
+      ->filterBy($filters, $request->only(['state', 'role', 'search']))
       ->orderBy('created_at', 'DESC')
       ->paginate(15);
 
-    $users->appends(request('search'));
+    // $users->appends(request('search'));
+    // $users->appends($request->only(['state', 'role', 'search']));
+    $users->appends($filters->valid());
 
     // return view('users.index')
     //   ->with('title', $title)

@@ -8,44 +8,53 @@ use Illuminate\Database\Eloquent\Builder;
 
 class UserQuery extends Builder
 {
-	use FiltersQueries;
+	// use FiltersQueries {
+	// 	filterBy as traitFilterBy;
+	// }
+
+	// public function filterBy(array $filters) {
+	// 	return (new UserFilter())->applyTo($this, $filters);
+
+	// 	// return $this->traitFilterBy($filters);
+	// 	// return $this;
+	// }
 
 	public function findByEmail($email) {
-    return static::where(compact('email'))->first();
+    return $this->where(compact('email'))->first();
   }
 
-  protected function filterRules() {
-  	return [
-  		'search' => 'filled',
-  		'state' => 'in:active,inactive',
-  		'role' => 'in:admin,user'
-  	];
-  }
+  // protected function filterRules() {
+  // 	return [
+  // 		'search' => 'filled',
+  // 		'state' => 'in:active,inactive',
+  // 		'role' => 'in:admin,user'
+  // 	];
+  // }
 
-  public function filterBySearch($search)
-  {
-    // if(empty($search)) { return $this; }
+  // public function filterBySearch($search)
+  // {
+  //   // if(empty($search)) { return $this; }
 
-    return $this->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%{$search}%")
-          			->orWhere('email', 'like', "%{$search}%")
-          			->orWhereHas('team', function($query) use ($search) {
-          				$query->where('name', 'like', "%{$search}%");
-          			});
-  }
+  //   return $this->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%{$search}%")
+  //         			->orWhere('email', 'like', "%{$search}%")
+  //         			->orWhereHas('team', function($query) use ($search) {
+  //         				$query->where('name', 'like', "%{$search}%");
+  //         			});
+  // }
 
-  public function filterByState($state)
-  {
-    // if($state == 'active') {
-    //   return $this->where('active', true);
-    // }
+  // public function filterByState($state)
+  // {
+  //   // if($state == 'active') {
+  //   //   return $this->where('active', true);
+  //   // }
 
-    // if($state == 'inactive') {
-    //   return $this->where('active', false);
-    // }
+  //   // if($state == 'inactive') {
+  //   //   return $this->where('active', false);
+  //   // }
 
-    // return $this;
-    return $this->where('active', $state == 'active');
-  }
+  //   // return $this;
+  //   return $this->where('active', $state == 'active');
+  // }
 
   // public function filterByRole($role)
   // {

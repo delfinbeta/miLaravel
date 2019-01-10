@@ -79,4 +79,9 @@ class User extends Authenticatable
       return $this->active ? 'active' : 'inactive';
     }
   }
+
+  public function scopeFilterBy($query, QueryFilter $filters, array $data) {
+    // return (new UserFilter())->applyTo($query, $filters);
+    return $filters->applyTo($query, $data);
+  }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
-use App\User;
+use App\{User, Skill};
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -66,5 +66,29 @@ class FilterUsersTest extends TestCase
     $response->assertViewCollection('users')
       ->contains($user)
       ->notContains($admin);
+  }
+
+  public function test_users_skills()
+  {
+    $php = factory(Skill::class)->create(['name' => 'php']);
+    $css = factory(Skill::class)->create(['name' => 'css']);
+
+    $backendDev = factory(User::class)->create();
+    $backendDev->skills()->attach($php);
+
+    $fullStackDev = factory(User::class)->create();
+    $fullStackDev->skills()->attach([$php->id, $css->id]);
+
+    $frontendDev = factory(User::class)->create();
+    $frontendDev->skills()->attach($css);
+
+    $response = $this->get("usuarios?skills[0]={$php->id}&skills[1]={$css->id}");
+
+    $response->assertStatus(200);
+
+    $response->assertViewCollection('users')
+      ->contains($fullStackDev)
+      ->notContains($backendDev)
+      ->notContains($frontendDev);
   }
 }

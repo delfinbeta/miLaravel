@@ -2,11 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Builder;
+// use Illuminate\Database\Eloquent\Builder;
 // use Illuminate\Support\Str;
 // use Illuminate\Support\Facades\Validator;
+// use Illuminate\Support\Facades\DB;
 
-class UserQuery extends Builder
+class UserQuery extends QueryBuilder
 {
 	// use FiltersQueries {
 	// 	filterBy as traitFilterBy;
@@ -22,6 +23,11 @@ class UserQuery extends Builder
 	public function findByEmail($email) {
     return $this->where(compact('email'))->first();
   }
+
+  // public function whereQuery($subquery, $operator, $value=null) {
+  //   $this->addBinding($subquery->getBindings());
+  //   $this->where(DB::raw("({$subquery->toSql()})"), $operator, $value);
+  // }
 
   // protected function filterRules() {
   // 	return [

@@ -62,19 +62,9 @@
     </div>
     <div class="col-md-6 text-right">
       <div class="form-inline form-dates">
-        <label for="date_start" class="form-label-sm">Fecha</label>&nbsp;
-        <div class="input-group">
-          <input type="text" class="form-control form-control-sm" name="date_start" id="date_start" placeholder="Desde">
-          <div class="input-group-append">
-            <button type="button" class="btn btn-secondary btn-sm"><i class="far fa-calendar-alt"></i></button>
-          </div>
-        </div>
-        <div class="input-group">
-          <input type="text" class="form-control form-control-sm" name="date_start" id="date_start" placeholder="Hasta">
-          <div class="input-group-append">
-            <button type="button" class="btn btn-secondary btn-sm"><i class="far fa-calendar-alt"></i></button>
-          </div>
-        </div> 
+        <label for="from" class="form-label-sm">Fecha</label>&nbsp;
+        <input type="text" class="form-control form-control-sm" name="from" id="from" placeholder="Desde" value="{{ request('from') }}" />
+        <input type="text" class="form-control form-control-sm" name="to" id="to" placeholder="Hasta" value="{{ request('to') }}" />
         &nbsp;
         <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
       </div>            

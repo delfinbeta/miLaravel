@@ -27,7 +27,6 @@ class UserProfileTest extends TestCase
   public function test_user_edit_its_profile()
   {
     $user = factory(User::class)->create();
-    $user->profile()->save(factory(UserProfile::class)->make());
 
     $newProfession = factory(Profession::class)->create();
 

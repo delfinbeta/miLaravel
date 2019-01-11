@@ -136,7 +136,8 @@ class UserSeeder extends Seeder
   {
     $user = factory(User::class)->create([
       'team_id' => rand(0, 2) ? null : $this->teams->random()->id,
-      'active' => rand(0, 3) ? true : false
+      'active' => rand(0, 3) ? true : false,
+      'created_at' => now()->subDays(rand(1, 90))
     ]);
 
     $user->skills()->attach($this->skills->random(rand(0, 6)));

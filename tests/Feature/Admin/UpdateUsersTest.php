@@ -51,9 +51,9 @@ class UpdateUsersTest extends TestCase
     //   'user_id' => $user->id,
     //   'profession_id' => $oldProfession->id
     // ]);
-    $user->profile()->save(factory(UserProfile::class)->make([
+    $user->profile->update([
       'profession_id' => $oldProfession->id
-    ]));
+    ]);
 
     $user->skills()->attach([$oldSkill1->id, $oldSkill2->id]);
 
